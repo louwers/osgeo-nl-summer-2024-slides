@@ -25,8 +25,39 @@ mdc: true
 fonts:
   sans: Open Sans
 ---
-
 # MapLibre
+---
+layout: full
+---
+
+<Map styleName="https://demotiles.maplibre.org/style.json" />
+
+<!-- <div class="absolute top-0 z-1 w-full h-full flex items-center justify-center">
+  <h1>MapLibre</h1>
+</div> -->
+
+<style>
+.slidev-layout{
+  padding: 0;
+}
+</style>
+
+---
+layout: full
+---
+
+<Map styleName="https://demotiles.maplibre.org/style.json" />
+
+<style>
+.slidev-layout{
+  padding: 0;
+}
+</style>
+
+---
+
+# MapLibre Style Spec Documentation
+
 
 ---
 
@@ -63,3 +94,4 @@ fonts:
 
 <a href="https://www.mappedin.com/"><img src="https://maplibre.org/img/mappedin-logo.svg" alt="Logo mappedin" class="h-11"/></a>
 </div>
+
