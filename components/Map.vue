@@ -2,22 +2,43 @@
 import maplibre from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useNav } from '@slidev/client'
-import { computed, getCurrentInstance, onMounted, Ref, ref, watch, watchEffect } from 'vue';
+import { computed, getCurrentInstance, inject, InjectionKey, onMounted, provide, Ref, ref, watch, watchEffect } from 'vue';
+import { mapKey } from './keys.ts';
 
 const instance = getCurrentInstance();
-const { currentSlideNo } = useNav();
+const { currentSlideNo, clicks } = useNav();
 
-const isSlideActive = computed(() => currentSlideNo.value === instance?.setupState.$page)
+// a slide is 'active' when it is the previous or the next slide
+// we don't want to keep all maps active because we will run
+// out of OpenGL contexts
+const isSlideActive = computed(() => 
+  currentSlideNo.value === instance?.setupState.$page ||
+  currentSlideNo.value + 1 === instance?.setupState.$page ||
+  currentSlideNo.value - 1 === instance?.setupState.$page
+)
 
-let map: maplibre.Map | null = null;
+watchEffect(() => {
+  console.log({
+    currentSlideNo: currentSlideNo.value,
+    $page: instance?.setupState.$page
+  })
+})
+
+let map: Ref<maplibre.Map | null> = ref(null);
 
 interface Props {
-  attributionControl?: boolean
-  styleName: string
+  attributionControl?: boolean,
+  styleName: string,
+  center?: [number, number],
+  zoom?: number,
+  mapClickEffects?: Array<(map: maplibre.Map) => void>
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  attributionControl: false,
+  attributionControl: true,
+  center: () => [0, 0],
+  zoom: 1,
+  mapClickEffects: () => []
 });
 
 const mapDiv: Ref<null | HTMLElement> = ref(null);
@@ -26,28 +47,43 @@ const mounted = ref(false);
 
 onMounted(() => {
   mounted.value = true;
-})
+});
+
+provide(mapKey, {
+  map
+});
+
+watch(clicks, (clickNo) => {
+  const mapClickEffect = props.mapClickEffects[clickNo];
+
+  if (mapClickEffect && map.value) {
+    mapClickEffect(map.value);
+  }
+});
 
 watchEffect(() => {
   if (!mounted.value) return;
   if (!mapDiv.value) return;
-  if (isSlideActive.value && !map) {
-    map = new maplibre.Map({
+  if (isSlideActive.value && !map.value) {
+    console.log("initializing MapLibre");
+    map.value = new maplibre.Map({
         container: mapDiv.value, // container id
-        style: 'https://demotiles.maplibre.org/style.json', // style URL
-        center: [0, 0], // starting position [lng, lat]
-        zoom: 1 // starting zoom
+        style: props.styleName, // style URL
+        center: props.center, // starting position [lng, lat]
+        zoom: props.zoom, // starting zoom
+        attributionControl: props.attributionControl
     });
-    map.on('load', () => {
-      map?.resize();
+    map.value.on('load', () => {
+      map.value?.resize();
     });
-  } else if (!isSlideActive && map) {
-    map.remove();
-    map = null;
+  } else if (!isSlideActive.value && map.value) {
+    map.value.remove();
+    map.value = null;
   }
 })
 </script>
 
 <template>
     <div style="height: 100%; width: 100%;" ref="mapDiv"></div>
+    <slot></slot>
 </template>

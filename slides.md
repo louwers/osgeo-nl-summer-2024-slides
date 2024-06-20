@@ -3,9 +3,9 @@
 theme: default
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
-background: https://cover.sli.dev
+# background: https://cover.sli.dev
 # some information about your slides, markdown enabled
-title: Welcome to Slidev
+title: MapLibre - The Inside Scoop
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.
@@ -19,49 +19,116 @@ highlighter: shiki
 drawings:
   persist: false
 # slide transition: https://sli.dev/guide/animations#slide-transitions
-transition: slide-left
+# transition: fade
 # enable MDC Syntax: https://sli.dev/guide/syntax#mdc-syntax
 mdc: true
 fonts:
   sans: Open Sans
+layout: full
+clicks: 2
 ---
-# MapLibre
+
+<MapFirstSlide />
+
+<div class="flex flex-col justify-center items-center h-full w-full absolute top-0" v-click.hide="1">
+  <div class="flex flex-col justify-center items-center bg-white bg-opacity-80 py-10 w-full">
+  <img src="/maplibre-logo.svg" class="w-60 mb-5" />
+
+  <h2 class="mb-3">The Inside Scoop 🍨</h2>
+
+  <p>Bart Louwers</p>
+  </div>
+
+  <div class="absolute bottom-0 left-0 p-5" v-click.hide="1">
+    <img src="/osgeo-logo-cmyk.svg" class="h-10" />
+    <span>Open Zomerpodium, 19th of July 2024</span>
+  </div>
+
+  
+</div>
 ---
 layout: full
+clicks: 0
 ---
 
-<Map styleName="https://demotiles.maplibre.org/style.json" />
-
-<!-- <div class="absolute top-0 z-1 w-full h-full flex items-center justify-center">
-  <h1>MapLibre</h1>
-</div> -->
-
-<style>
-.slidev-layout{
-  padding: 0;
-}
-</style>
+<JawgMap />
 
 ---
-layout: full
+layout: two-cols
 ---
 
-<Map styleName="https://demotiles.maplibre.org/style.json" />
+<h2>MapLibre GL JS</h2>
 
-<style>
-.slidev-layout{
-  padding: 0;
-}
-</style>
+<img src="/screenshot-web.png" class="pr-6 pt-3" />
+
+::right::
+
+<h2>MapLibre Native</h2>
+
+<div class="flex flex-row pt-3">
+
+  <img src="/android.png" class="w-40" />
+
+  <img src="/ios.png" class="w-40" />
+</div>
+
+---
+layout: two-cols
+---
+
+<h2 class="pb-3">MapLibre GL JS</h2>
+
+- Written in JavaScript / TypeScript
+- Also called MapLibre Web
+- Uses WebGL
+- Lots of organic contributors
+
+<img src="/download-stats-maplibre-gl.png" v-click class="pr-4" />
+
+::right::
+
+<h2 class="pb-3">MapLibre Native</h2>
+
+- Written in C++ (and Objective-C, Java/Kotlin)
+- iOS, Android, Node.js, Qt, Windows, Linux
+- OpenGL ES, Metal
 
 ---
 
 # MapLibre Style Spec Documentation
 
+<img src="/style-spec-screenshot.png" class="h-90" />
+
+<a class="font-mono">https://maplibre.org/maplibre-style-spec</a>
 
 ---
+layout: two-cols
+---
 
+# Developments
 
+<v-clicks >
+
+- MapLibre Native: Metal backend (**Released this year!**)
+- MapLibre Native: Vulkan backend
+- Expansion of the style specification
+- Parity between MapLibre GL JS and MapLibre Native
+- MapLibre GL JS: Globe View
+- MapLibre Tiles (MLT)
+
+</v-clicks>
+
+::right::
+
+<div class="flex h-full justify-center items-center">
+  <img src="/metal.svg" class="absolute w-40" v-click="[1]" />
+  <img src="/Vulkan_API_logo.svg" class="absolute w-50" v-click="[2]" />
+  <img src="/globe-view.png" class="absolute w-100" v-click="[5]" />
+
+</div>
+
+---
+---
 # Sponsors
 
 <p></p>
@@ -95,3 +162,31 @@ layout: full
 <a href="https://www.mappedin.com/"><img src="https://maplibre.org/img/mappedin-logo.svg" alt="Logo mappedin" class="h-11"/></a>
 </div>
 
+---
+---
+
+<h1>Questions?</h1>
+
+<v-clicks depth="2">
+
+- Why does a company like Amazon want to use MapLibre?
+- Can I work for MapLibre?
+  - **Yes** <a class="font-mono" href="https://maplibre.org/jobs">https://maplibre.org/jobs</a>
+- How can I get involved?
+  - Slack, GitHub, Monthly Newsletter (LinkedIn, Mastodon) <a class="font-mono" href="https://maplibre.org/community">https://maplibre.org/community</a>
+
+</v-clicks>
+
+---
+---
+
+# See you at FOSS4G Europe 2024?
+
+- Workshop: [Generate, serve, and visualize your own base map or overlay tiles with MapLibre stack and Planetiler](https://talks.osgeo.org/foss4g-europe-2024-workshops/talk/GFKMYG/) with Yuri Astrakhan
+- Talk: [Building a New Rendering Backend for MapLibre Native: Industry Collaboration in FOSS](https://talks.osgeo.org/foss4g-europe-2024/talk/SBRTLT/)
+
+<div class="flex flex-row justify-end pt-20">
+
+<img src="/FOSS4GE_light_logo_with_triangle.svg" class="w-50" />
+
+</div>
